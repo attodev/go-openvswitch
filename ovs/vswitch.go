@@ -56,6 +56,14 @@ func (v *VSwitchService) AddPort(bridge string, port string) error {
 	return err
 }
 
+// AddPortWithVLan attaches a port to a bridge on Open vSwitch with VLAN.
+// The port may or may not already exist.
+func (v *VSwitchService) AddPortWithVLan(bridge, port string, vlanId int) error {
+	tag := fmt.Sprintf("tag=%d", vlanId)
+	_, err := v.exec("--may-exist", "add-port", bridge, port, tag)
+	return err
+}
+
 // DeleteBridge detaches a bridge from Open vSwitch.  The bridge may or may
 // not already exist.
 func (v *VSwitchService) DeleteBridge(bridge string) error {
